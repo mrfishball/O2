@@ -1,0 +1,27 @@
+<div class="row text-center paginate">
+  <ul class="pagination">
+    <li{% if not object_list.has_prev %} class="disabled"{% endif %}>
+      {% if not object_list.has_prev %}
+        <a href="#"><small><span class="glyphicon glyphicon-chevron-left"></span></small></a>
+      {% else %}
+        <a href="./?page={{ object_list.prev_num }}"><small><span class="glyphicon glyphicon-chevron-left"></span></small></a>
+      {% endif %}
+    </li>
+    {% for page in object_list.iter_pages() %}
+      <li>
+        {% if page %}
+          <a {% if page == object_list.page %}class="active" {% endif %}href="./?page={{ page }}">{{ page }}</a>
+        {% else %}
+          <a class="disabled">...</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+    <li{% if not object_list.has_next %} class="disabled"{% endif %}>
+      {% if object_list.has_next %}
+        <a href="./?page={{ object_list.next_num }}"><small><span class="glyphicon glyphicon-chevron-right"></span></small></a>
+      {% else %}
+        <a href="#"><small><span class="glyphicon glyphicon-chevron-right"></span></small></a>
+      {% endif %}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,7 @@
+{% extends 'admin/master.html' %}
+{{ super () }}
+
+{% block body %}
+
+	<h3>Hi, {{ g.user.name.split(' ')[0] }}</h3>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "macros/form_field.html" import form_field %}
+
+{% block title %}O2 - Connect Ideas{% endblock %}
+
+{% block page_content %}
+
+{% if current_user.is_authenticated %}
+<style>
+  body {
+    background: #F8F8F8;
+  }
+</style>
+<div id="single">
+    <div class="container">
+       <h1>Welcome! {{ current_user.name.split(' ')[0] }}</h1>
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="span12">
+        <div class="clear-form no-border">                                
+            <form action="{{ url_for('main.index', next=request.args.get('next','')) }}" method="post">  
+                <div class="form-heading">
+                    <h3 class="header">Create an account</h3>   
+                    <hr/>                            
+                </div>  
+                <div class="form-body">
+                    {{ form_field(form.name) }}
+    				{{ form_field(form.email) }}
+    				{{ form_field(form.password) }}
+    				{{ form_field(form.password2) }}                          
+                    <p class="highlight">
+                        By clicking on the "Create an account" button below, you certify that you have read and agree to our <a href="#">terms of use</a> and <a href="">privacy policy</a>.
+                    </p>  
+                </div>                                 
+                <div class="form-footer">                               
+                    <button class="btn btn-large btn-green btn-block" type="submit">Create an account</button> 
+                    <p class="center">
+                         Already have an account? <a href="users/login">Sign In</a>
+                    </p>
+                </div>                                         
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

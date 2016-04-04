@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block sidebar %}
+  <form class="form-inline well" method="get" role="form">
+    <h4>Blog Search</h4>
+    <div class="input-group">
+      <input class="form-control input-xs" name="q" placeholder="Search..." value="{{ request.args.get('q', '') }}" />
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Go</button>
+      </span>
+    </div>
+  </form>
+{% endblock %}
+
+{% block page_content %}
+  {% include "posts/list.html" %}
+  {% include "include/page_links.html" %}
+{% endblock %}

@@ -1,0 +1,9 @@
+{% macro form_field(field) %}
+  <div class="{% if field.errors %}has-error has-feedback{% endif %}">
+    {{ field.label(class='sr-only') }}
+    	{% if field.errors %}<span class="glyphicon glyphicon-warning-sign form-control-feedback"></span>{% endif %}
+      	{% if field.description %}<span class="help-block">{{ safe }}</span>{% endif %}
+      	{% for error in field.errors %}<span class="help-block">{{ error }}</span>{% endfor %}
+      {{ field(class='input-block-level', placeholder=field.description, **kwargs) }}
+  </div>
+{% endmacro %}

@@ -1,0 +1,35 @@
+<ul class="nav navbar-nav">
+	<li><a href="{{ url_for('main.index') }}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+	<li><a href="{{ url_for('posts.index') }}"><span class="glyphicon glyphicon-comment"></span> Topics</a></li>
+</ul>
+
+{% if current_user.is_authenticated %}
+	{% if current_user.confirmed %}
+		{% if current_user.is_admin %}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('posts.create') }}"><span class="glyphicon glyphicon-edit"></span> Write</a></li>
+				<li><a href="{{ url_for('user_blueprint.protected') }}"><span class="glyphicon glyphicon-tower"></span> Protected</a></li>
+				<li><a href="{{ url_for('user_blueprint.user', email=current_user.email) }}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
+				<li><a href="{{ url_for('admin.index') }}" target="_blank"><span class="glyphicon glyphicon-cog"></span> Admin</a></li>
+				<li><a href="{{ url_for('user_blueprint.logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+			</ul>
+		{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ url_for('posts.create') }}"><span class="glyphicon glyphicon-edit"></span> Write</a></li>
+				<li><a href="{{ url_for('user_blueprint.protected') }}">Protected</a></li>
+				<li><a href="{{ url_for('user_blueprint.user', email=current_user.email) }}">Profile</a></li>
+				<li><a href="{{ url_for('user_blueprint.logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+			</ul>
+		{% endif %}
+	{% else %}
+		<ul class="nav navbar-nav navbar-right">
+			<li><a href="{{ url_for('posts.create') }}"><span class="glyphicon glyphicon-edit"></span> Write</a></li>
+			<li><a href="{{ url_for('user_blueprint.unconfirmed') }}"><span class="glyphicon glyphicon-warning-sign"></span> Confirm</a></li>
+			<li><a href="{{ url_for('user_blueprint.logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+		</ul>
+	{% endif %}
+{% else %}
+	<ul class="nav navbar-nav navbar-right">
+		<li><a href="{{ url_for('user_blueprint.login') }}"><span class="glyphicon glyphicon-log-in"></span> Sign in</a></li>
+	</ul>
+{% endif %}

@@ -1,0 +1,86 @@
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}O2{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='codehilite.css') }}">
+<style>
+    @font-face{
+        font-family: "Gotham Rounded";
+        src:url("{{ url_for('static', filename='fonts/GothamRoundedMedium_21022.ttf') }}");
+        }
+        body {
+            font-family: "Gotham Rounded";
+            font-size: 14px;
+    }
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% block extra_styles %}{% endblock %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-default" role="navigation">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+             data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">O2</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            {% include 'menubar.html' %}
+        </div>
+
+</div>
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="text-center alert alert-{{ category }} alert-dismissible" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<h1>{% block content_title %}{% endblock %}</h1>
+<div id="wrapper">
+{% block page_content %}{% endblock %}
+</div>
+{% block paginate %}{% endblock %}
+<div id="footer">
+  <div id="links">
+    <div class="container">
+      <div class="col-sm-2">
+        <p class="brand"><span>O2</span></p>
+      </div>
+      <div class="col-sm-8">
+        <ul class="list-inline">
+          <li><a href="home-masonry.html">Home</a></li>
+          <li><a href="page-about.html">About</a></li>
+          <li><a href="page-contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-md-2">
+        <ul class="list-inline">
+          <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+          <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+          <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<a id="scroll-to-top">
+  <i class="fa fa-angle-up"></i>
+</a>
+
+{% endblock %}

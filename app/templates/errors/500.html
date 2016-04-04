@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block extra_styles %}
+<style>
+	body {
+		background: #F8F8F8;
+	}
+</style>
+{% endblock %}
+
+
+{% block title %}505{% endblock %}
+
+{% block page_content %}
+<div id="single">
+  <div class="container">
+    <div class="error">
+      <h1>500</h1>
+      <h2>Server error!</h2>
+      <p>We are working around the clock to fix the issue!</p>
+      <a class="btn btn-ada-dark" href="{{ url_for('main.index') }}">Back to Home</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

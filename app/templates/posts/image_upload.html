@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% from "macros/form_field.html" import form_field %}
+
+{% block extra_styles %}
+<style>
+  body {
+    background: #F8F8F8;
+  }
+</style>
+{% endblock %}
+
+
+{% block title %}Upload an image{% endblock %}
+
+{% block content_title %}Upload an image{% endblock %}
+
+{% block page_content %}
+<form action="{{ url_for('posts.image_upload') }}" enctype="multipart/form-data" method="post">
+  {% for field in form %}
+    {{ form_field(field) }}
+  {% endfor %}
+  <div class="form-group">
+    <div class="col-sm-offset-3 col-sm-9">
+      <br>
+      <button type="submit" class="btn btn-primary">Upload</button>
+      <a class="btn btn-default" href="{{ url_for('posts.index') }}">Cancel</a>
+    </div>
+  </div>
+</form>
+{% endblock %}
