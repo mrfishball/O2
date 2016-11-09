@@ -31,4 +31,5 @@ class DevelopmentConfig(BaseConfig):
 	DEBUG = True
 	WTF_CSRF_ENABLED = True
 	SQLALCHEMY_DATABASE_URI = 'sqlite:///%s/dev.db' % basedir
+	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
