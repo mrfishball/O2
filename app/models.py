@@ -18,14 +18,15 @@ def gravatar(self, size):
 		'size': str(size)})
 
 class Social(UserMixin, db.Model):
-	FACEBOOK = 0
-	GOOGLE = 1
-
 	id = db.Column(db.Integer, primary_key=True)
-	provider = db.Column(db.SmallInteger)
+	provider = db.Column(db.String(64))
 	email = db.Column(db.String(120), index=True)
-	nickname = db.Column(db.String(64))
+	name = db.Column(db.String(64))
 	slug = db.Column(db.String(64), unique=True)
+	active = db.Column(db.Boolean, default=True)
+	admin = db.Column(db.Boolean, default=False)
+	confirmed = db.Column(db.Boolean, default=True)
+	confirmed_on = db.Column(db.DateTime, default=datetime.datetime.now)
 	registered_on = db.Column(db.DateTime, default=datetime.datetime.now)
 
 	def __init__(self, *args, **kwargs):
@@ -34,16 +35,16 @@ class Social(UserMixin, db.Model):
 		self.avatar()
 
 	def generate_slug(self):
-		if self.nickname:
-			self.slug = slugify(self.nickname)
+		if self.name:
+			self.slug = slugify(self.name)
 
 	def avatar(self, size=None):
 		return gravatar(self, size)
 
 	@staticmethod
-	def register(provider, email, nickname):
+	def register(provider, email, name):
 		registered_on = datetime.datetime.now()
-		social = Social(provider=provider, email=email, nickname=nickname, registered_on=registered_on)
+		social = Social(provider=provider, email=email, name=name, registered_on=registered_on)
 		db.session.add(social)
 		db.session.commit()
 		return social
@@ -51,15 +52,14 @@ class Social(UserMixin, db.Model):
 	def __repr__(self):
 		return '<Social %r>' % (self.email)
 
-
 # The User table that has a static function for can be called by any User object to register new users.
 # Avatars and slugs(based on the names of the users) will also be create upon registration.
 class User(UserMixin, db.Model):
 	#__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)
 	email = db.Column(db.String(120), nullable = False, index=True, unique=True)
-	name = db.Column(db.String(64))
-	slug = db.Column(db.String(64), unique=True)
+	name = db.Column(db.String(120))
+	slug = db.Column(db.String(120), unique=True)
 	active = db.Column(db.Boolean, default=True)
 	admin = db.Column(db.Boolean, default=False)
 	registered_on = db.Column(db.DateTime, default=datetime.datetime.now)

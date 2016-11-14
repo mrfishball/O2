@@ -24,6 +24,16 @@ class BaseConfig(object):
 	# mail accounts
 	MAIL_DEFAULT_SENDER = 'hahahehe8787@gmail.com'
 
+	OAUTH_CREDENTIALS = {
+    'facebook': {
+        'id': '361820247484435',
+        'secret': '1d5067a42ddce5ce1c3230602b40e09b'
+    },
+    'google': {
+        'id': '630855590588-vo8prdaiqt3ekvk1u5afujm7t9bvgvrr.apps.googleusercontent.com',
+        'secret': 'ePBeiRpdFVIwvinFyrxQ1Kl_'
+    }
+}
 
 class DevelopmentConfig(BaseConfig):
 

@@ -17,7 +17,11 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a href="{{ url_for('posts.create') }}"><span class="glyphicon glyphicon-edit"></span> Write</a></li>
 				<li><a href="{{ url_for('user_blueprint.protected') }}">Protected</a></li>
-				<li><a href="{{ url_for('user_blueprint.user', email=current_user.email) }}">Profile</a></li>
+				{% if current_user.provider %}
+					<li><a href="{{ url_for('user_blueprint.social', email=current_user.email) }}">Profile</a></li>
+				{% else %}
+					<li><a href="{{ url_for('user_blueprint.user', email=current_user.email) }}">Profile</a></li>
+				{% endif %}
 				<li><a href="{{ url_for('user_blueprint.logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 			</ul>
 		{% endif %}
