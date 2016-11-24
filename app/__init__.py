@@ -76,7 +76,7 @@ api.create_api(
 # Login manager to manager users that are currently logged in to our website
 @lm.user_loader
 def load_user(id):
-	return models.User.query.get(int(id)) or models.Social.query.get(int(id))
+	return models.User.query.get(int(id))
 
 # Set the current user value so that we can use it to verify current users' sessions and user authentication.
 @app.before_request

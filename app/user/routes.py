@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, render_template, session, redirect, url_for, flash, request, make_response
 from flask.ext.login import login_user, logout_user, login_required, current_user
 from datetime import datetime
-from ..models import User, Social
+from ..models import User
 from ..token import confirm_token, generate_confirmation_token
 from .forms import LoginForm
 from ..decorators import check_confirmed
@@ -25,15 +25,15 @@ def oauth_callback(provider):
     if not current_user.is_anonymous:
         return redirect(url_for('main.index'))
     oauth = OAuthSignIn.get_provider(provider)
-    provider, name, email = oauth.callback()
+    provider, token, name, email = oauth.callback()
     if email is None:
         flash('Authentication failed.')
         return redirect(url_for('main.index'))
-    user = Social.query.filter_by(email=email).first()
-    if not user:
-        user = Social.register(provider=provider, name=name, email=email)
+    user = User.query.filter_by(email=email).first()
+    if not user or user.provider != provider:
+        user = User.register(confirmed=True, provider=provider, name=name, email=email, password=token)
     login_user(user)
-    return redirect(request.args.get('next') or url_for('user_blueprint.social', email=email))
+    return redirect(request.args.get('next') or url_for('user_blueprint.user', email=email))
 
 @user_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
@@ -67,17 +67,17 @@ def logout():
 def protected():
 	return render_template('user/protected.html')
 
-@user_blueprint.route('/social/<email>', methods=['GET', 'POST'])
-@login_required
-@check_confirmed
-def social(email):
-	user = Social.query.filter_by(email=email).first_or_404()
-	if user is None:
-		flash('User %s not found.' % email, 'warning')
-		return redirect(url_for('main.index'))
-	comment = random.randint(154, 2856)
-	thumbsup = random.randint(267, 5213)
-	return render_template('user/user.html', user=user, comment=comment, thumbsup=thumbsup)
+# @user_blueprint.route('/social/<email>', methods=['GET', 'POST'])
+# @login_required
+# @check_confirmed
+# def social(email):
+# 	user = Social.query.filter_by(email=email).first_or_404()
+# 	if user is None:
+# 		flash('User %s not found.' % email, 'warning')
+# 		return redirect(url_for('main.index'))
+# 	comment = random.randint(154, 2856)
+# 	thumbsup = random.randint(267, 5213)
+# 	return render_template('user/user.html', user=user, comment=comment, thumbsup=thumbsup)
 
 @user_blueprint.route('/user/<email>', methods=['GET', 'POST'])
 @login_required

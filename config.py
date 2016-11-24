@@ -18,11 +18,11 @@ class BaseConfig(object):
 	MAIL_USE_SSL = True
 
 	# email authentication
-	MAIL_USERNAME = 'hahahehe8787@gmail.com'
-	MAIL_PASSWORD = 'uglymojo0723'
+	MAIL_USERNAME = 'your-email'
+	MAIL_PASSWORD = 'password'
 
 	# mail accounts
-	MAIL_DEFAULT_SENDER = 'hahahehe8787@gmail.com'
+	MAIL_DEFAULT_SENDER = 'your-email'
 
 	OAUTH_CREDENTIALS = {
     'facebook': {
@@ -36,7 +36,6 @@ class BaseConfig(object):
 }
 
 class DevelopmentConfig(BaseConfig):
-
 	TESTING = True
 	DEBUG = True
 	WTF_CSRF_ENABLED = True

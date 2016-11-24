@@ -17,56 +17,57 @@ def gravatar(self, size):
 		'gravatar_id': hashlib.md5(self.email).hexdigest(),
 		'size': str(size)})
 
-class Social(UserMixin, db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	provider = db.Column(db.String(64))
-	email = db.Column(db.String(120), index=True)
-	name = db.Column(db.String(64))
-	slug = db.Column(db.String(64), unique=True)
-	active = db.Column(db.Boolean, default=True)
-	admin = db.Column(db.Boolean, default=False)
-	confirmed = db.Column(db.Boolean, default=True)
-	confirmed_on = db.Column(db.DateTime, default=datetime.datetime.now)
-	registered_on = db.Column(db.DateTime, default=datetime.datetime.now)
+# class Social(UserMixin, db.Model):
+# 	id = db.Column(db.Integer, primary_key=True)
+# 	provider = db.Column(db.String(64))
+# 	email = db.Column(db.String(120), index=True)
+# 	name = db.Column(db.String(64))
+# 	slug = db.Column(db.String(64), unique=True)
+# 	active = db.Column(db.Boolean, default=True)
+# 	admin = db.Column(db.Boolean, default=False)
+# 	confirmed = db.Column(db.Boolean, default=True)
+# 	confirmed_on = db.Column(db.DateTime, default=datetime.datetime.now)
+# 	registered_on = db.Column(db.DateTime, default=datetime.datetime.now)
 
-	def __init__(self, *args, **kwargs):
-		super(Social, self).__init__(*args, **kwargs)
-		self.generate_slug()
-		self.avatar()
+# 	def __init__(self, *args, **kwargs):
+# 		super(Social, self).__init__(*args, **kwargs)
+# 		self.generate_slug()
+# 		self.avatar()
 
-	def generate_slug(self):
-		if self.name:
-			self.slug = slugify(self.name)
+# 	def generate_slug(self):
+# 		if self.name:
+# 			self.slug = slugify(self.name)
 
-	def avatar(self, size=None):
-		return gravatar(self, size)
+# 	def avatar(self, size=None):
+# 		return gravatar(self, size)
 
-	@staticmethod
-	def register(provider, email, name):
-		registered_on = datetime.datetime.now()
-		social = Social(provider=provider, email=email, name=name, registered_on=registered_on)
-		db.session.add(social)
-		db.session.commit()
-		return social
+# 	@staticmethod
+# 	def register(provider, email, name):
+# 		registered_on = datetime.datetime.now()
+# 		social = Social(provider=provider, email=email, name=name, registered_on=registered_on)
+# 		db.session.add(social)
+# 		db.session.commit()
+# 		return social
 
-	def __repr__(self):
-		return '<Social %r>' % (self.email)
+# 	def __repr__(self):
+# 		return '<Social %r>' % (self.email)
 
 # The User table that has a static function for can be called by any User object to register new users.
 # Avatars and slugs(based on the names of the users) will also be create upon registration.
 class User(UserMixin, db.Model):
 	#__tablename__ = 'users'
 	id = db.Column(db.Integer, primary_key=True)
-	email = db.Column(db.String(120), nullable = False, index=True, unique=True)
+	provider = db.Column(db.String(64))
+	email = db.Column(db.String(120), nullable=False, index=True)
 	name = db.Column(db.String(120))
 	slug = db.Column(db.String(120), unique=True)
 	active = db.Column(db.Boolean, default=True)
 	admin = db.Column(db.Boolean, default=False)
 	registered_on = db.Column(db.DateTime, default=datetime.datetime.now)
-	confirmed = db.Column(db.Boolean, default=False)
+	confirmed = db.Column(db.Boolean)
 	confirmed_on = db.Column(db.DateTime, default=None)
 	posts = db.relationship('Post', backref='author', lazy='dynamic')
-	password_hash = db.Column(db.String(64))
+	password_hash = db.Column(db.String(225))
 
 	def __init__(self, *args, **kwargs):
 		super(User, self).__init__(*args, **kwargs)
@@ -90,9 +91,9 @@ class User(UserMixin, db.Model):
 		return self.admin
 		
 	@staticmethod
-	def register(name, email, password):
+	def register(name, email, password, provider, confirmed=False):
 		registered_on = datetime.datetime.now()
-		user = User(name=name, email=email, registered_on=registered_on)
+		user = User(confirmed=confirmed, name=name, email=email, registered_on=registered_on, provider=provider)
 		user.set_password(password)
 		db.session.add(user)
 		db.session.commit()

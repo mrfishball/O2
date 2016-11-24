@@ -75,7 +75,7 @@ def create():
 	if request.method == 'POST':
 		form = PostForm(request.form)
 		if form.validate():
-			post = form.save_post(Post(author=g.user))
+			post = form.save_post(Post(author=current_user))
 			db.session.add(post)
 			db.session.commit()
 			flash('Post "%s" created successfully.' % post.title, 'success')

@@ -62,6 +62,7 @@ class FacebookSignIn(OAuthSignIn):
         me = oauth_session.get('me?fields=id,email').json()
         return (
             'facebook',
+            me['id'],
             me.get('email').split('@')[0],  # Facebook does not provide
                                             # username, so the email's user
                                             # is used instead
@@ -100,7 +101,7 @@ class GoogleSignIn(OAuthSignIn):
                 decoder = json.loads
         )
         me = oauth_session.get('').json()
-        return ('google', me['name'],
+        return ('google', me['sub'], me['name'],
                 me['email'])
 
 # class TwitterSignIn(OAuthSignIn):

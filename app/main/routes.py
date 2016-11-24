@@ -19,9 +19,10 @@ def index():
 	if request.method == 'POST':
 		form = RegForm(request.form)
 		if form.validate():
-			email = User.query.filter_by(email=form.email.data).first()
-			if email is None:
-				user = User.register(name=form.name.data, email=form.email.data, password=form.password.data)
+			user = User.query.filter_by(email=form.email.data).first()
+			if user is None or user.provider != 'own':
+				provider = 'own'
+				user = User.register(provider=provider, name=form.name.data, email=form.email.data, password=form.password.data)
 				token = generate_confirmation_token(user.email)
 				confirm_url = url_for('user_blueprint.confirm_email', token=token, _external=True)
 				html = render_template('user/activate.html', confirm_url=confirm_url)
